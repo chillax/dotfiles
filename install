@@ -29,3 +29,12 @@ for file in $files; do
     ln -s $dir/$file ~/.$file
 done
 
+# Install Vundle
+echo "Installing Vundle"
+git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/vundle
+echo "...done"
+
+# Install other vim plugins
+echo "Installing Vim plugins"
+vim +BundleInstall +qall
+echo "...done"
