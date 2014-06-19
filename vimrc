@@ -2,7 +2,7 @@ set nocompatible
 filetype off
 
 set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
+call vundle#begin()
 
 " Let vundle manage vundle, required
 Bundle 'gmarik/vundle'
@@ -14,9 +14,11 @@ Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
 Bundle 'kchmck/vim-coffee-script'
 Bundle 'groenewege/vim-less'
 
+call vundle#end()
+
 " 256 Colors and a theme
 set t_Co=256
-colorscheme tomorrow-night
+colorscheme Tomorrow-Night
 set background=dark
 
 " Syntax highlight
@@ -35,6 +37,23 @@ set smartindent
 set tabstop=4
 set shiftwidth=4
 set noexpandtab
+
+" Toggle indentation (4 tabs / 2 spaces)
+function TabToggle()
+	if &expandtab
+		set shiftwidth=4
+		set tabstop=4
+		set softtabstop=4
+		set noexpandtab
+	else
+		set shiftwidth=2
+		set tabstop=2
+		set softtabstop=2
+		set expandtab
+	endif
+endfunction
+nmap <F9> mz:execute TabToggle()<CR>'z
+
 
 " Show trailing whitespace
 set list
