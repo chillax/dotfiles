@@ -5,14 +5,17 @@ set rtp+=~/.vim/bundle/vundle
 call vundle#begin()
 
 " Let vundle manage vundle, required
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
 " Other plugins
-Bundle 'scrooloose/nerdtree'
-Bundle 'mattn/emmet-vim'
-Bundle 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'groenewege/vim-less'
+Plugin 'scrooloose/nerdtree'
+Plugin 'mattn/emmet-vim'
+Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
+Plugin 'kchmck/vim-coffee-script'
+Plugin 'groenewege/vim-less'
+Plugin 'bling/vim-airline'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Lokaltog/powerline'
 
 call vundle#end()
 
@@ -24,6 +27,15 @@ set background=dark
 " Syntax highlight
 syntax enable
 filetype plugin indent on
+
+" Always show statusline
+set laststatus=2
+
+" Use powerline fonts in GUI mode ('Needs Incosolata for PowerLine' font)
+if has("gui_running")
+	let g:airline_powerline_fonts = 1
+	set guifont=Inconsolata\ for\ Powerline:h13
+endif
 
 " Line numbering
 set number
