@@ -31,6 +31,10 @@ filetype plugin indent on
 " Always show statusline
 set laststatus=2
 
+" Hide scrollbars in GUI mode
+set guioptions-=r
+set guioptions-=L
+
 " Use powerline fonts in GUI mode ('Needs Incosolata for PowerLine' font)
 if has("gui_running")
 	let g:airline_powerline_fonts = 1
