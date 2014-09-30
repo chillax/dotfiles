@@ -16,6 +16,7 @@ Plugin 'groenewege/vim-less'
 Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline'
+Plugin 'tpope/vim-sleuth'
 
 call vundle#end()
 
