@@ -17,6 +17,7 @@ Plugin 'bling/vim-airline'
 Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline'
 Plugin 'tpope/vim-sleuth'
+Plugin 'luochen1990/rainbow'
 
 call vundle#end()
 
@@ -83,6 +84,9 @@ let maplocalleader = ";"
 " NerdTREE (toggle with C-n, close vim if only NerdTree open)
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" Rainbow hilite parens
+let g:rainbow_active = 1
 
 " Mouse support
 set mouse=a
