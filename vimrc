@@ -18,6 +18,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'Lokaltog/powerline'
 Plugin 'tpope/vim-sleuth'
 Plugin 'luochen1990/rainbow'
+Plugin 'airblade/vim-gitgutter'
 
 call vundle#end()
 
@@ -52,9 +53,10 @@ highlight ColorColumn ctermbg=darkgray
 
 " Indentation (4 tabs)
 set smartindent
-set tabstop=4
-set shiftwidth=4
-set noexpandtab
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set expandtab
 
 " Toggle indentation (4 tabs / 2 spaces)
 function TabToggle()
