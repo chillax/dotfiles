@@ -1,35 +1,33 @@
 set nocompatible
-filetype off
 
-set rtp+=~/.vim/bundle/vundle
-call vundle#begin()
+call plug#begin('~/.vim/plugged')
 
-" Let vundle manage vundle, required
-Plugin 'gmarik/vundle'
+Plug 'tpope/vim-sensible'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'mattn/emmet-vim'
+Plug 'chriskempson/base16-vim'
+Plug 'kchmck/vim-coffee-script'
+Plug 'groenewege/vim-less'
+Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-sleuth'
+Plug 'luochen1990/rainbow'
+Plug 'airblade/vim-gitgutter'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'junegunn/limelight.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 
-" Other plugins
-Plugin 'scrooloose/nerdtree'
-Plugin 'mattn/emmet-vim'
-Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim/'}
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'groenewege/vim-less'
-Plugin 'bling/vim-airline'
-Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/powerline'
-Plugin 'tpope/vim-sleuth'
-Plugin 'luochen1990/rainbow'
-Plugin 'airblade/vim-gitgutter'
-
-call vundle#end()
+call plug#end()
 
 " 256 Colors and a theme
 set t_Co=256
-colorscheme Tomorrow-Night
+colorscheme base16-default
 set background=dark
 
 " Syntax highlight
 syntax enable
-filetype plugin indent on
 
 " Always show statusline
 set laststatus=2
@@ -41,7 +39,7 @@ set guioptions-=L
 " Use powerline fonts in GUI mode ('Needs Incosolata for PowerLine' font)
 if has("gui_running")
 	let g:airline_powerline_fonts = 1
-	set guifont=Inconsolata\ for\ Powerline:h13
+	set guifont=Menlo\ for\ Powerline:h11
 endif
 
 " Line numbering
@@ -87,6 +85,13 @@ let maplocalleader = ";"
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
+" change ctrlp working directory to nerdtree's root
+let g:NERDTreeChDirMode = 2
+let g:ctrlp_working_path_mode = 'rw'
+
+" ctrlp ignored folders
+let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
+
 " Rainbow hilite parens
 let g:rainbow_active = 1
 
@@ -98,3 +103,9 @@ set wildmode=longest,list
 
 " OSX clipboard
 set clipboard=unnamed
+
+" Airline tabline
+let g:airline#extensions#tabline#enabled = 1
+
+" Airline theme
+let g:airline_theme='base16_default'
