@@ -18,6 +18,8 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/limelight.vim'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
+Plug 'briancollins/vim-jst'
+Plug 'rking/ag.vim'
 
 call plug#end()
 
