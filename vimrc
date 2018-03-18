@@ -2,100 +2,88 @@ set nocompatible
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-sensible'
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
-Plug 'mattn/emmet-vim'
-Plug 'chriskempson/base16-vim'
-Plug 'kchmck/vim-coffee-script'
-Plug 'groenewege/vim-less'
-Plug 'bling/vim-airline'
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " File browser
+Plug 'mattn/emmet-vim'            " Html completion
+Plug 'bling/vim-airline'          " Status and tab bar
 Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-sleuth'
-Plug 'luochen1990/rainbow'
-Plug 'airblade/vim-gitgutter'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'junegunn/limelight.vim'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'briancollins/vim-jst'
-Plug 'rking/ag.vim'
+Plug 'tpope/vim-fugitive'         " Git integrations
+Plug 'airblade/vim-gitgutter'     " Git status in sidebar
+Plug 'sheerun/vim-polyglot'       " Language packs
+Plug 'mileszs/ack.vim'            " Ack and ag support
+Plug 'scrooloose/nerdcommenter'   " Faster commenting
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'           " Fuzzy file finding
+Plug 'junegunn/seoul256.vim'      " Seoul colors <3
+Plug 'w0rp/ale'                   " Async linting engine
+Plug 'ap/vim-css-color'           " Highlight colors
+Plug 'lifepillar/vim-mucomplete'  " Autocompletion
+Plug 'tpope/vim-surround'         " Faster surrounding for codes
+Plug 'jiangmiao/auto-pairs'       " Autocomplete brackets, parens etc.
 
 call plug#end()
 
 " 256 Colors and a theme
 set t_Co=256
-colorscheme base16-default
+let g:seoul256_background = 233
+colo seoul256
 set background=dark
 
-" Syntax highlight
+" Indentation & syntax
+filetype plugin indent on
 syntax enable
-
-" Always show statusline
-set laststatus=2
+set backspace=indent,eol,start
+set tabstop=2
+set softtabstop=2
+set expandtab
+set shiftwidth=2
+set autoindent
 
 " Hide scrollbars in GUI mode
 set guioptions-=r
 set guioptions-=L
 
-" Use powerline fonts in GUI mode ('Needs Incosolata for PowerLine' font)
-if has("gui_running")
-	let g:airline_powerline_fonts = 1
-	set guifont=Menlo\ for\ Powerline:h11
-endif
+" Relative line numbering, show absolute numbers in insert mode
+set number relativenumber
 
-" Line numbering
-set number
+augroup numbertoggle
+  autocmd!
+  autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
+  autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
+augroup END
+
+" Map fzf to ctrl+p
+nnoremap <silent> <C-p> :FZF -m<cr>
+
+" Use ripgrep in fzf <3
+let $FZF_DEFAULT_COMMAND='rg --files --color --hidden --follow --glob "!.git/*"'
 
 " Columns (mark column 80)
 set colorcolumn=80
-highlight ColorColumn ctermbg=darkgray
+highlight ColorColumn ctermbg=234
 
-" Indentation (4 tabs)
-set smartindent
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set expandtab
-
-" Toggle indentation (4 tabs / 2 spaces)
-function TabToggle()
-	if &expandtab
-		set shiftwidth=4
-		set tabstop=4
-		set softtabstop=4
-		set noexpandtab
-	else
-		set shiftwidth=2
-		set tabstop=2
-		set softtabstop=2
-		set expandtab
-	endif
-endfunction
-nmap <F9> mz:execute TabToggle()<CR>'z
-
+" Use ripgrep with ack if available
+if executable('rg')
+  let g:ackprg = 'rg --vimgrep'
+endif
 
 " Show trailing whitespace
 set list
-set listchars=tab:\ \ ,trail:.
+if &listchars ==# 'eol:$'
+  set listchars=tab:>\ ,trail:-,extends:>,precedes:<,nbsp:+
+endif
 
 " Change leader key
 let mapleader = ","
 let maplocalleader = ";"
 
+nnoremap <Leader>h :bp<CR>
+nnoremap <Leader>l :bn<CR>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>d :ALEDetail<CR>
+
 " NerdTREE (toggle with C-n, close vim if only NerdTree open)
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
-" change ctrlp working directory to nerdtree's root
-let g:NERDTreeChDirMode = 2
-let g:ctrlp_working_path_mode = 'rw'
-
-" ctrlp ignored folders
-let g:ctrlp_custom_ignore = 'node_modules\|DS_Store\|git'
-
-" Rainbow hilite parens
-let g:rainbow_active = 1
 
 " Mouse support
 set mouse=a
@@ -110,4 +98,52 @@ set clipboard=unnamed
 let g:airline#extensions#tabline#enabled = 1
 
 " Airline theme
-let g:airline_theme='base16_default'
+let g:airline_theme='minimalist'
+
+" Completion with mucomplete
+set completeopt+=menuone,noinsert,noselect
+set shortmess+=c
+
+let g:mucomplete#enable_auto_at_startup = 1
+inoremap <expr> <c-e> mucomplete#popup_exit("\<c-e>")
+inoremap <expr> <c-y> mucomplete#popup_exit("\<c-y>")
+inoremap <expr>  <cr> mucomplete#popup_exit("\<cr>")
+
+" NERDCommenter - Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" NERDCommenter - Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" NERDCommenter - Align line-wise comment delimiters flush left instead
+" of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" NERDCommenter - Allow commenting and inverting empty lines
+" (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Fix syntax highlighting in .vue files
+autocmd FileType vue syntax sync fromstart
+let g:vue_disable_pre_processors=1
+
+" NERDCommenter hooks for .vue files
+let g:ft = ''
+function! NERDCommenter_before()
+  if &ft == 'vue'
+    let g:ft = 'vue'
+    let stack = synstack(line('.'), col('.'))
+    if len(stack) > 0
+      let syn = synIDattr((stack)[0], 'name')
+      if len(syn) > 0
+        exe 'setf ' . substitute(tolower(syn), '^vue_', '', '')
+      endif
+    endif
+  endif
+endfunction
+function! NERDCommenter_after()
+  if g:ft == 'vue'
+    setf vue
+    let g:ft = ''
+  endif
+endfunction
