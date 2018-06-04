@@ -147,3 +147,10 @@ function! NERDCommenter_after()
     let g:ft = ''
   endif
 endfunction
+
+" Let ALE only use Linters specified here
+let g:ale_linters_explicit = 1
+let g:ale_linters = {
+\  'javascript': ['eslint']
+\}
+
