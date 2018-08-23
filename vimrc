@@ -11,7 +11,7 @@ Plug 'airblade/vim-gitgutter'     " Git status in sidebar
 Plug 'sheerun/vim-polyglot'       " Language packs
 Plug 'mileszs/ack.vim'            " Ack and ag support
 Plug 'scrooloose/nerdcommenter'   " Faster commenting
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'           " Fuzzy file finding
 Plug 'junegunn/seoul256.vim'      " Seoul colors <3
 Plug 'w0rp/ale'                   " Async linting engine
@@ -19,6 +19,7 @@ Plug 'ap/vim-css-color'           " Highlight colors
 Plug 'lifepillar/vim-mucomplete'  " Autocompletion
 Plug 'tpope/vim-surround'         " Faster surrounding for codes
 Plug 'jiangmiao/auto-pairs'       " Autocomplete brackets, parens etc.
+Plug 'editorconfig/editorconfig-vim' " .editorconfig support
 
 call plug#end()
 
@@ -51,11 +52,14 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
 augroup END
 
+" Add fzf to runtime path
+set rtp+=/usr/local/opt/fzf
+
 " Map fzf to ctrl+p
 nnoremap <silent> <C-p> :FZF -m<cr>
 
 " Use ripgrep in fzf <3
-let $FZF_DEFAULT_COMMAND='rg --files --color --hidden --follow --glob "!.git/*"'
+" let $FZF_DEFAULT_COMMAND='rg --files --color --hidden --follow --glob "!.git/*"'
 
 " Columns (mark column 80)
 set colorcolumn=80
@@ -80,8 +84,10 @@ nnoremap <Leader>h :bp<CR>
 nnoremap <Leader>l :bn<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>d :ALEDetail<CR>
+nnoremap <Leader>i :normal migg=G`i`<CR>
 
 " NerdTREE (toggle with C-n, close vim if only NerdTree open)
+let NERDTreeShowLineNumbers=0
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
@@ -105,9 +111,6 @@ set completeopt+=menuone,noinsert,noselect
 set shortmess+=c
 
 let g:mucomplete#enable_auto_at_startup = 1
-inoremap <expr> <c-e> mucomplete#popup_exit("\<c-e>")
-inoremap <expr> <c-y> mucomplete#popup_exit("\<c-y>")
-inoremap <expr>  <cr> mucomplete#popup_exit("\<cr>")
 
 " NERDCommenter - Add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
