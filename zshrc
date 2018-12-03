@@ -16,3 +16,10 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 # Add pip packages to path
 export PATH=/Users/joonas/Library/Python/3.7/bin:$PATH
 
+# ls colors and aliases for macOS
+export CLICOLOR=1
+alias ll='ls -l'
+alias la='ls -la'
+
+# Disable ctrl+d EOF
+setopt ignore_eof
