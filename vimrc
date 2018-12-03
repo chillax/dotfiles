@@ -20,14 +20,19 @@ Plug 'lifepillar/vim-mucomplete'  " Autocompletion
 Plug 'tpope/vim-surround'         " Faster surrounding for codes
 Plug 'jiangmiao/auto-pairs'       " Autocomplete brackets, parens etc.
 Plug 'editorconfig/editorconfig-vim' " .editorconfig support
+Plug 'ericcurtin/CurtineIncSw.vim' " Switch between header and source files
+Plug 'andymass/vim-matchup'       " Better % tag navigation for html etc.
 
 call plug#end()
 
 " 256 Colors and a theme
 set t_Co=256
-let g:seoul256_background = 233
+let g:seoul256_background=233
 colo seoul256
 set background=dark
+
+" Set swapfile folder to ~/.vim/swapfiles
+set directory=$HOME/.vim/swapfiles//
 
 " Indentation & syntax
 filetype plugin indent on
@@ -86,7 +91,10 @@ nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>d :ALEDetail<CR>
 nnoremap <Leader>i :normal migg=G`i`<CR>
 
-" NerdTREE (toggle with C-n, close vim if only NerdTree open)
+" Change between header and source files in C
+map <Leader>a :call CurtineIncSw()<CR>
+
+" NERDTree (toggle with C-n, close vim if only NerdTree open)
 let NERDTreeShowLineNumbers=0
 map <C-n> :NERDTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
