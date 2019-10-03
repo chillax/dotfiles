@@ -23,3 +23,11 @@ alias la='ls -la'
 
 # Disable ctrl+d EOF
 setopt ignore_eof
+
+# Brew completions
+if type brew &>/dev/null; then
+  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
+fi
+
+# Asdf support
+. /usr/local/opt/asdf/asdf.sh
