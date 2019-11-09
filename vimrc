@@ -2,27 +2,36 @@ set nocompatible
 
 call plug#begin('~/.vim/plugged')
 
+" Visual
+Plug 'junegunn/seoul256.vim'      " Seoul colors <3
+Plug 'itchyny/lightline.vim'      " Statusline
+Plug 'ap/vim-css-color'           " Highlight colors
+Plug 'junegunn/goyo.vim'          " Distraction free mode
+
+" File management
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " File browser
-Plug 'mattn/emmet-vim'            " Html completion
-Plug 'bling/vim-airline'          " Status and tab bar
-Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-fugitive'         " Git integrations
-Plug 'airblade/vim-gitgutter'     " Git status in sidebar
-Plug 'sheerun/vim-polyglot'       " Language packs
-Plug 'mileszs/ack.vim'            " Ack and ag support
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'           " Fuzzy file finding
-Plug 'junegunn/seoul256.vim'      " Seoul colors <3
+Plug 'tpope/vim-vinegar'          " Netrw improvements
+
+" Autocompletion & checking
 Plug 'w0rp/ale'                   " Async linting engine
-Plug 'ap/vim-css-color'           " Highlight colors
 Plug 'lifepillar/vim-mucomplete'  " Autocompletion
-Plug 'tpope/vim-surround'         " Faster surrounding for codes
+
+" Integrations
+Plug 'tpope/vim-fugitive'         " Git integrations
+Plug 'airblade/vim-gitgutter'     " Git status in sidebar
 Plug 'editorconfig/editorconfig-vim' " .editorconfig support
+
+" Language specific
+Plug 'mattn/emmet-vim'            " Html completion
+Plug 'styled-components/vim-styled-components', { 'branch': 'main' } " CSS-in-JS support
+
+" Misc
+Plug 'tpope/vim-surround'         " Faster surrounding for codes
 Plug 'andymass/vim-matchup'       " Better % tag navigation for html etc.
 Plug 'cohama/lexima.vim'          " Less quirky paren matching
 Plug 'tomtom/tcomment_vim'        " Operator based commenting
-Plug 'tpope/vim-vinegar'          " Netrw improvements
-Plug 'junegunn/goyo.vim'          " Distraction free mode
 
 call plug#end()
 
@@ -31,6 +40,22 @@ set t_Co=256
 let g:seoul256_background=233
 colo seoul256
 set background=dark
+
+" Statusline
+set laststatus=2
+let g:lightline = {
+      \ 'colorscheme': 'seoul256',
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ],
+      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+      \   'right': [ [ 'lineinfo' ],
+      \              [ 'percent' ],
+      \              [ 'filetype' ] ]
+      \ },
+      \ 'component_function': {
+      \   'gitbranch': 'fugitive#head'
+      \ },
+      \ }
 
 " Set swapfile folder to ~/.vim/swapfiles
 set directory=$HOME/.vim/swapfiles//
@@ -62,15 +87,6 @@ set autoindent
 set guioptions-=r
 set guioptions-=L
 
-" Relative line numbering, show absolute numbers in insert mode
-" set number relativenumber
-"
-" augroup numbertoggle
-"   autocmd!
-"   autocmd BufEnter,FocusGained,InsertLeave * set relativenumber
-"   autocmd BufLeave,FocusLost,InsertEnter   * set norelativenumber
-" augroup END
-
 " Add fzf to runtime path
 set rtp+=/usr/local/opt/fzf
 
@@ -83,11 +99,6 @@ nnoremap <silent> <C-p> :FZF -m<cr>
 " Columns (mark column 80)
 set colorcolumn=80
 highlight ColorColumn ctermbg=234
-
-" Use ripgrep with ack if available
-if executable('rg')
-  let g:ackprg = 'rg --vimgrep'
-endif
 
 " Show trailing whitespace
 set list
@@ -118,12 +129,6 @@ set wildmode=longest,list
 
 " OSX clipboard
 set clipboard=unnamed
-
-" Airline tabline
-let g:airline#extensions#tabline#enabled = 1
-
-" Airline theme
-let g:airline_theme='minimalist'
 
 " Completion with mucomplete
 set completeopt+=menuone,noinsert,noselect
