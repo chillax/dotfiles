@@ -1,61 +1,121 @@
+"
+" Requirements:
+" - minpac for plugin management
+"
+
 set nocompatible
 
-call plug#begin('~/.vim/plugged')
+"
+" Plugin config
+"
 
-" Visual
-Plug 'junegunn/seoul256.vim'      " Seoul colors <3
-Plug 'itchyny/lightline.vim'      " Statusline
-Plug 'ap/vim-css-color'           " Highlight colors
-Plug 'junegunn/goyo.vim'          " Distraction free mode
+" Try to load minpac.
+packadd minpac
 
-" File management
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' } " File browser
-Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'           " Fuzzy file finding
-Plug 'tpope/vim-vinegar'          " Netrw improvements
+if exists('*minpac#init')
+  " Init minpac
+  call minpac#init()
+  call minpac#add('k-takata/minpac', {'type': 'opt'})
 
-" Autocompletion & checking
-Plug 'w0rp/ale'                   " Async linting engine
-Plug 'lifepillar/vim-mucomplete'  " Autocompletion
+  " Visual
+  call minpac#add('junegunn/seoul256.vim')
+  call minpac#add('itchyny/lightline.vim')
+  call minpac#add('ap/vim-css-color')
+  call minpac#add('junegunn/goyo.vim')
 
-" Integrations
-Plug 'tpope/vim-fugitive'         " Git integrations
-Plug 'airblade/vim-gitgutter'     " Git status in sidebar
-Plug 'editorconfig/editorconfig-vim' " .editorconfig support
+  " File management
+  call minpac#add('scrooloose/nerdtree')
+  call minpac#add('junegunn/fzf.vim')
+  call minpac#add('tpope/vim-vinegar')
 
-" Language specific
-Plug 'mattn/emmet-vim'            " Html completion
-Plug 'styled-components/vim-styled-components', { 'branch': 'main' } " CSS-in-JS support
+  " Autocompletion & linting
+  call minpac#add('w0rp/ale')
+  call minpac#add('lifepillar/vim-mucomplete')
 
-" Misc
-Plug 'tpope/vim-surround'         " Faster surrounding for codes
-Plug 'andymass/vim-matchup'       " Better % tag navigation for html etc.
-Plug 'cohama/lexima.vim'          " Less quirky paren matching
-Plug 'tomtom/tcomment_vim'        " Operator based commenting
+  " Integrations
+  call minpac#add('tpope/vim-fugitive')
+  call minpac#add('mhinz/vim-signify')
+  call minpac#add('editorconfig/editorconfig-vim')
 
-call plug#end()
+  " Language specific
+  call minpac#add('mattn/emmet-vim')
+  call minpac#add('styled-components/vim-styled-components', {'branch': 'main'})
+  call minpac#add('elixir-editors/vim-elixir')
+  call minpac#add('slashmili/alchemist.vim')
 
-" 256 Colors and a theme
+  " Misc
+  call minpac#add('tpope/vim-surround')
+  call minpac#add('andymass/vim-matchup')
+  call minpac#add('cohama/lexima.vim')
+  call minpac#add('tomtom/tcomment_vim')
+
+  " Plugin specific config
+
+  " Colorscheme
+  let g:seoul256_background=233
+  colo seoul256
+
+  " Statusline
+  set laststatus=2
+  let g:lightline = {
+        \ 'colorscheme': 'seoul256',
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
+        \   'right': [ [ 'lineinfo' ],
+        \              [ 'percent' ],
+        \              [ 'filetype' ] ]
+        \ },
+        \ 'component_function': {
+        \   'gitbranch': 'fugitive#head'
+        \ },
+        \ }
+
+  " Faster update for signify
+  set updatetime=400
+
+  " Add fzf to runtime path
+  set rtp+=/usr/local/opt/fzf
+
+  " Map fzf to ctrl+p
+  nnoremap <silent> <C-p> :FZF -m<cr>
+
+  " NERDTree (toggle with C-n, close vim if only NerdTree open)
+  let NERDTreeShowLineNumbers=0
+  map <C-n> :NERDTreeToggle<CR>
+  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+  " Fix syntax highlighting in .vue files
+  autocmd FileType vue syntax sync fromstart
+  let g:vue_disable_pre_processors=1
+
+  " ALE Config
+
+  let g:ale_completion_enabled = 1
+
+  let g:ale_linters_explicit = 1
+  let g:ale_linters = {
+  \  'javascript': ['eslint']
+  \}
+
+  let g:ale_fixers = {
+  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+  \   'javascript': ['prettier', 'eslint'],
+  \}
+
+  set omnifunc=ale#completion#OmniFunc
+endif
+
+"
+" General config
+"
+
+" Colors
 set t_Co=256
-let g:seoul256_background=233
-colo seoul256
 set background=dark
 
-" Statusline
-set laststatus=2
-let g:lightline = {
-      \ 'colorscheme': 'seoul256',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-      \   'right': [ [ 'lineinfo' ],
-      \              [ 'percent' ],
-      \              [ 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'gitbranch': 'fugitive#head'
-      \ },
-      \ }
+" To map <Esc> to exit terminal-mode:
+:tnoremap <Esc> <C-\><C-n>
 
 " Set swapfile folder to ~/.vim/swapfiles
 set directory=$HOME/.vim/swapfiles//
@@ -87,15 +147,6 @@ set autoindent
 set guioptions-=r
 set guioptions-=L
 
-" Add fzf to runtime path
-set rtp+=/usr/local/opt/fzf
-
-" Map fzf to ctrl+p
-nnoremap <silent> <C-p> :FZF -m<cr>
-
-" Use ripgrep in fzf <3
-" let $FZF_DEFAULT_COMMAND='rg --files --color --hidden --follow --glob "!.git/*"'
-
 " Columns (mark column 80)
 set colorcolumn=80
 highlight ColorColumn ctermbg=234
@@ -110,16 +161,12 @@ endif
 let mapleader = ","
 let maplocalleader = ";"
 
+" Remaps
 nnoremap <Leader>h :bp<CR>
 nnoremap <Leader>l :bn<CR>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>d :ALEDetail<CR>
 nnoremap <Leader>i :normal migg=G`i`<CR>
-
-" NERDTree (toggle with C-n, close vim if only NerdTree open)
-let NERDTreeShowLineNumbers=0
-map <C-n> :NERDTreeToggle<CR>
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 
 " Mouse support
 set mouse=a
@@ -130,25 +177,7 @@ set wildmode=longest,list
 " OSX clipboard
 set clipboard=unnamed
 
-" Completion with mucomplete
+" Completion
 set completeopt+=menuone,noinsert,noselect
-set shortmess+=c   " Shut off completion messages
-set belloff+=ctrlg " If Vim beeps during completion
-
-let g:mucomplete#enable_auto_at_startup = 1
-
-" Fix syntax highlighting in .vue files
-autocmd FileType vue syntax sync fromstart
-let g:vue_disable_pre_processors=1
-
-" Let ALE only use Linters specified here
-let g:ale_linters_explicit = 1
-let g:ale_linters = {
-\  'javascript': ['eslint']
-\}
-
-" ALE Fixers
-let g:ale_fixers = {
-\   '*': ['remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['prettier', 'eslint'],
-\}
+set shortmess+=c   " Supress completion messages
+set belloff+=ctrlg " Silence Vim beeps during completion
