@@ -19,12 +19,12 @@ if exists('*minpac#init')
 
   " Visual
   call minpac#add('junegunn/seoul256.vim')
+  call minpac#add('nickaroot/vim-xcode-dark-theme')
   call minpac#add('itchyny/lightline.vim')
   call minpac#add('ap/vim-css-color')
   call minpac#add('junegunn/goyo.vim')
 
   " File management
-  call minpac#add('scrooloose/nerdtree')
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('tpope/vim-vinegar')
 
@@ -42,6 +42,11 @@ if exists('*minpac#init')
   call minpac#add('styled-components/vim-styled-components', {'branch': 'main'})
   call minpac#add('elixir-editors/vim-elixir')
   call minpac#add('slashmili/alchemist.vim')
+  call minpac#add('maxmellon/vim-jsx-pretty')
+  call minpac#add('pangloss/vim-javascript')
+  call minpac#add('posva/vim-vue')
+  call minpac#add('cakebaker/scss-syntax.vim')
+  call minpac#add('jparise/vim-graphql')
 
   " Misc
   call minpac#add('tpope/vim-surround')
@@ -52,13 +57,13 @@ if exists('*minpac#init')
   " Plugin specific config
 
   " Colorscheme
-  let g:seoul256_background=233
-  colo seoul256
+  " let g:seoul256_background=233
+  " colorscheme seoul256
 
   " Statusline
   set laststatus=2
   let g:lightline = {
-        \ 'colorscheme': 'seoul256',
+        \ 'colorscheme': 'one',
         \ 'active': {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
@@ -80,11 +85,6 @@ if exists('*minpac#init')
   " Map fzf to ctrl+p
   nnoremap <silent> <C-p> :FZF -m<cr>
 
-  " NERDTree (toggle with C-n, close vim if only NerdTree open)
-  let NERDTreeShowLineNumbers=0
-  map <C-n> :NERDTreeToggle<CR>
-  autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
-
   " Fix syntax highlighting in .vue files
   autocmd FileType vue syntax sync fromstart
   let g:vue_disable_pre_processors=1
@@ -104,18 +104,30 @@ if exists('*minpac#init')
   \}
 
   set omnifunc=ale#completion#OmniFunc
+
+  " Decrease amount of preprocessor checks for vue files
+  let g:vue_pre_processors = ['scss']
+
+  " Signify colors
+  highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
+  highlight SignifySignAdd    ctermfg=green  guifg=#00ff00 cterm=NONE gui=NONE
+  highlight SignifySignDelete ctermfg=red    guifg=#ff0000 cterm=NONE gui=NONE
+  highlight SignifySignChange ctermfg=yellow guifg=#ffff00 cterm=NONE gui=NONE
 endif
 
 "
 " General config
 "
 
+" Show 
+set showcmd
+
 " Colors
 set t_Co=256
 set background=dark
 
-" To map <Esc> to exit terminal-mode:
-:tnoremap <Esc> <C-\><C-n>
+" To map 2x <Esc> to exit terminal-mode:
+:tnoremap <Esc><Esc> <C-\><C-n>
 
 " Set swapfile folder to ~/.vim/swapfiles
 set directory=$HOME/.vim/swapfiles//
@@ -137,11 +149,11 @@ set incsearch " show search matches as you type
 filetype plugin indent on
 syntax enable
 set backspace=indent,eol,start
+set autoindent
 set tabstop=2
 set softtabstop=2
 set expandtab
 set shiftwidth=2
-set autoindent
 
 " Hide scrollbars in GUI mode
 set guioptions-=r
@@ -171,8 +183,11 @@ nnoremap <Leader>i :normal migg=G`i`<CR>
 " Mouse support
 set mouse=a
 
-" http://stackoverflow.com/questions/526858/how-do-i-make-vim-do-normal-bash-like-tab-completion-for-file-names
-set wildmode=longest,list
+" Show tab completion bar when needed
+set wildmenu
+
+" File name completion with tab in command mode
+set wildmode=list:longest,full
 
 " OSX clipboard
 set clipboard=unnamed
@@ -181,3 +196,9 @@ set clipboard=unnamed
 set completeopt+=menuone,noinsert,noselect
 set shortmess+=c   " Supress completion messages
 set belloff+=ctrlg " Silence Vim beeps during completion
+
+" Markdown code blocks
+let g:markdown_fenced_languages = ['html', 'js=javascript', 'bash=sh', 'sql']
+
+" Prevent netrw from leaving orphan buffers
+let g:netrw_fastbrowse = 0
