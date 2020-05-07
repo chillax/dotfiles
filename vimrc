@@ -18,8 +18,7 @@ if exists('*minpac#init')
   call minpac#add('k-takata/minpac', {'type': 'opt'})
 
   " Visual
-  call minpac#add('junegunn/seoul256.vim')
-  call minpac#add('nickaroot/vim-xcode-dark-theme')
+  call minpac#add('arzg/vim-colors-xcode')
   call minpac#add('itchyny/lightline.vim')
   call minpac#add('ap/vim-css-color')
   call minpac#add('junegunn/goyo.vim')
@@ -43,6 +42,7 @@ if exists('*minpac#init')
   call minpac#add('elixir-editors/vim-elixir')
   call minpac#add('slashmili/alchemist.vim')
   call minpac#add('maxmellon/vim-jsx-pretty')
+  call minpac#add('jonsmithers/vim-html-template-literals')
   call minpac#add('pangloss/vim-javascript')
   call minpac#add('posva/vim-vue')
   call minpac#add('cakebaker/scss-syntax.vim')
@@ -51,14 +51,12 @@ if exists('*minpac#init')
   " Misc
   call minpac#add('tpope/vim-surround')
   call minpac#add('andymass/vim-matchup')
-  call minpac#add('cohama/lexima.vim')
   call minpac#add('tomtom/tcomment_vim')
 
   " Plugin specific config
 
   " Colorscheme
-  " let g:seoul256_background=233
-  " colorscheme seoul256
+  colorscheme xcodedark
 
   " Statusline
   set laststatus=2
@@ -100,7 +98,7 @@ if exists('*minpac#init')
 
   let g:ale_fixers = {
   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \   'javascript': ['prettier', 'eslint'],
+  \   'javascript': ['eslint'],
   \}
 
   set omnifunc=ale#completion#OmniFunc
@@ -110,9 +108,9 @@ if exists('*minpac#init')
 
   " Signify colors
   highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
-  highlight SignifySignAdd    ctermfg=green  guifg=#00ff00 cterm=NONE gui=NONE
-  highlight SignifySignDelete ctermfg=red    guifg=#ff0000 cterm=NONE gui=NONE
-  highlight SignifySignChange ctermfg=yellow guifg=#ffff00 cterm=NONE gui=NONE
+  highlight SignifySignAdd    ctermfg=green  guifg=#acf2e4 cterm=NONE gui=NONE
+  highlight SignifySignDelete ctermfg=red    guifg=#ff8170 cterm=NONE gui=NONE
+  highlight SignifySignChange ctermfg=yellow guifg=#d9c97c cterm=NONE gui=NONE
 endif
 
 "
@@ -125,6 +123,15 @@ set showcmd
 " Colors
 set t_Co=256
 set background=dark
+set termguicolors
+
+" Override background color with transparent
+augroup vimrc
+ autocmd!
+ autocmd ColorScheme * hi Normal guibg=NONE
+ autocmd ColorScheme * hi NonText guibg=NONE
+ autocmd ColorScheme * hi EndOfBuffer guibg=NONE
+augroup END
 
 " To map 2x <Esc> to exit terminal-mode:
 :tnoremap <Esc><Esc> <C-\><C-n>
@@ -161,7 +168,7 @@ set guioptions-=L
 
 " Columns (mark column 80)
 set colorcolumn=80
-highlight ColorColumn ctermbg=234
+highlight ColorColumn ctermbg=234 guibg=#1d1d21
 
 " Show trailing whitespace
 set list
@@ -202,3 +209,10 @@ let g:markdown_fenced_languages = ['html', 'js=javascript', 'bash=sh', 'sql']
 
 " Prevent netrw from leaving orphan buffers
 let g:netrw_fastbrowse = 0
+
+" Decrease esc delay
+set ttimeout " time out for key codes
+set ttimeoutlen=100 " wait up to 100ms after Esc for special key
+
+" Better html indenting of <style> tags, see :help html-indenting
+let g:html_indent_style1 = "inc"
