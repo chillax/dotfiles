@@ -14,7 +14,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --follow --glob "!.git/*"'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Add pip packages to path
-export PATH=/Users/joonas/Library/Python/3.7/bin:$PATH
+export PATH=/Users/joonas/Library/Python/3.8/bin:$PATH
 
 # ls colors and aliases for macOS
 export CLICOLOR=1
@@ -34,3 +34,6 @@ fi
 . /usr/local/opt/asdf/asdf.sh
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
