@@ -10,26 +10,30 @@ set nocompatible
 "
 
 " Try to load minpac.
+set packpath^=~/.vim
 packadd minpac
 
-if exists('*minpac#init')
+if exists('g:loaded_minpac')
   " Init minpac
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
 
+  " Autocompletion & linting
+  call minpac#add('w0rp/ale')
+  call minpac#add('lifepillar/vim-mucomplete')
+  call minpac#add('ludovicchabant/vim-gutentags')
+
   " Visual
-  call minpac#add('arzg/vim-colors-xcode')
+  call minpac#add('junegunn/seoul256.vim')
+  call minpac#add('ayu-theme/ayu-vim')
   call minpac#add('itchyny/lightline.vim')
   call minpac#add('ap/vim-css-color')
   call minpac#add('junegunn/goyo.vim')
+  call minpac#add('Yggdroot/indentLine')
 
   " File management
   call minpac#add('junegunn/fzf.vim')
   call minpac#add('tpope/vim-vinegar')
-
-  " Autocompletion & linting
-  call minpac#add('w0rp/ale')
-  call minpac#add('lifepillar/vim-mucomplete')
 
   " Integrations
   call minpac#add('tpope/vim-fugitive')
@@ -47,6 +51,7 @@ if exists('*minpac#init')
   call minpac#add('posva/vim-vue')
   call minpac#add('cakebaker/scss-syntax.vim')
   call minpac#add('jparise/vim-graphql')
+  call minpac#add('HerringtonDarkholme/yats.vim')
 
   " Misc
   call minpac#add('tpope/vim-surround')
@@ -56,23 +61,30 @@ if exists('*minpac#init')
   " Plugin specific config
 
   " Colorscheme
-  colorscheme xcodedark
+  let g:seoul256_background = 233
+  let g:seoul256_light_background = 254
+  " let ayucolor="light"  " for light version of theme
+  " let ayucolor="mirage" " for mirage version of theme
+  let ayucolor="dark"   " for dark version of theme
+  colorscheme ayu
 
   " Statusline
   set laststatus=2
-  let g:lightline = {
-        \ 'colorscheme': 'one',
-        \ 'active': {
+  let g:lightline = {}
+
+  let g:lightline.component_function = {
+        \     'gitbranch': 'fugitive#head'
+        \ }
+
+  let g:lightline.active = {
         \   'left': [ [ 'mode', 'paste' ],
         \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
         \   'right': [ [ 'lineinfo' ],
         \              [ 'percent' ],
         \              [ 'filetype' ] ]
-        \ },
-        \ 'component_function': {
-        \   'gitbranch': 'fugitive#head'
-        \ },
         \ }
+
+  let g:lightline.colorscheme = 'ayu_dark'
 
   " Faster update for signify
   set updatetime=400
@@ -88,17 +100,20 @@ if exists('*minpac#init')
   let g:vue_disable_pre_processors=1
 
   " ALE Config
-
   let g:ale_completion_enabled = 1
-
   let g:ale_linters_explicit = 1
+
   let g:ale_linters = {
-  \  'javascript': ['eslint']
+  \  'javascript': ['eslint', 'tsserver'],
+  \  'typescript': ['eslint', 'tsserver'],
+  \  'typescriptreact': ['eslint', 'tsserver']
   \}
 
   let g:ale_fixers = {
   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \   'javascript': ['eslint'],
+  \   'javascript': ['prettier', 'eslint'],
+  \   'typescript': ['prettier', 'eslint'],
+  \   'typescriptreact': ['prettier', 'eslint']
   \}
 
   set omnifunc=ale#completion#OmniFunc
@@ -111,27 +126,39 @@ if exists('*minpac#init')
   highlight SignifySignAdd    ctermfg=green  guifg=#acf2e4 cterm=NONE gui=NONE
   highlight SignifySignDelete ctermfg=red    guifg=#ff8170 cterm=NONE gui=NONE
   highlight SignifySignChange ctermfg=yellow guifg=#d9c97c cterm=NONE gui=NONE
+
+  " Gutentags
+  let g:gutentags_add_default_project_roots = 0
+  let g:gutentags_project_root = ['package.json', '.git', 'Makefile']
+  let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+  let g:gutentags_generate_on_write = 1
+  let g:gutentags_ctags_exclude = ['node_modules']
+
+  " IndentLine
+  let g:indentLine_char = '▏'
+  let g:indentLine_first_char = '▏'
+  let g:indentLine_showFirstIndentLevel = 1
+  let g:indentLine_setColors = 0
 endif
 
 "
 " General config
 "
 
-" Show 
+" Show
 set showcmd
 
 " Colors
-set t_Co=256
 set background=dark
 set termguicolors
 
 " Override background color with transparent
-augroup vimrc
- autocmd!
- autocmd ColorScheme * hi Normal guibg=NONE
- autocmd ColorScheme * hi NonText guibg=NONE
- autocmd ColorScheme * hi EndOfBuffer guibg=NONE
-augroup END
+" augroup vimrc
+"  autocmd!
+"  autocmd ColorScheme * hi Normal guibg=NONE
+"  autocmd ColorScheme * hi NonText guibg=NONE
+"  autocmd ColorScheme * hi EndOfBuffer guibg=NONE
+" augroup END
 
 " To map 2x <Esc> to exit terminal-mode:
 :tnoremap <Esc><Esc> <C-\><C-n>
@@ -153,6 +180,7 @@ set hlsearch  " highlight search terms
 set incsearch " show search matches as you type
 
 " Indentation & syntax
+filetype plugin on
 filetype plugin indent on
 syntax enable
 set backspace=indent,eol,start
@@ -161,10 +189,6 @@ set tabstop=2
 set softtabstop=2
 set expandtab
 set shiftwidth=2
-
-" Hide scrollbars in GUI mode
-set guioptions-=r
-set guioptions-=L
 
 " Columns (mark column 80)
 set colorcolumn=80
@@ -181,11 +205,11 @@ let mapleader = ","
 let maplocalleader = ";"
 
 " Remaps
-nnoremap <Leader>h :bp<CR>
-nnoremap <Leader>l :bn<CR>
-nnoremap <Leader>b :Buffers<CR>
-nnoremap <Leader>d :ALEDetail<CR>
-nnoremap <Leader>i :normal migg=G`i`<CR>
+nnoremap <silent> <Leader>b :Buffers<CR>
+nnoremap <silent> <Leader>d :ALEDetail<CR>
+nnoremap <silent> <Leader>h :ALEHover<CR>
+nnoremap <silent> <Leader>g :ALEGoToDefinition<CR>
+nnoremap <silent> <Leader>i :normal migg=G`i`<CR>
 
 " Mouse support
 set mouse=a
@@ -200,7 +224,7 @@ set wildmode=list:longest,full
 set clipboard=unnamed
 
 " Completion
-set completeopt+=menuone,noinsert,noselect
+set completeopt+=longest,menuone,noinsert,noselect
 set shortmess+=c   " Supress completion messages
 set belloff+=ctrlg " Silence Vim beeps during completion
 
