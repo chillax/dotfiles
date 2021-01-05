@@ -55,6 +55,7 @@ if exists('g:loaded_minpac')
 
   " Misc
   call minpac#add('tpope/vim-surround')
+  call minpac#add('tpope/vim-unimpaired')
   call minpac#add('andymass/vim-matchup')
   call minpac#add('tomtom/tcomment_vim')
 
@@ -63,9 +64,7 @@ if exists('g:loaded_minpac')
   " Colorscheme
   let g:seoul256_background = 233
   let g:seoul256_light_background = 254
-  " let ayucolor="light"  " for light version of theme
-  " let ayucolor="mirage" " for mirage version of theme
-  let ayucolor="dark"   " for dark version of theme
+  let ayucolor="dark"
   colorscheme ayu
 
   " Statusline
@@ -85,6 +84,23 @@ if exists('g:loaded_minpac')
         \ }
 
   let g:lightline.colorscheme = 'ayu_dark'
+
+  function! LightMode()
+    set background=light
+    let ayucolor="light"
+    colorscheme ayu
+    let g:lightline.colorscheme = 'ayu_light'
+  endfunction
+
+  function! DarkMode()
+    set background=dark
+    let ayucolor="dark"
+    colorscheme ayu
+    let g:lightline.colorscheme = 'ayu_dark'
+  endfunction
+
+  " Line numbering
+  set number
 
   " Faster update for signify
   set updatetime=400
@@ -206,10 +222,13 @@ let maplocalleader = ";"
 
 " Remaps
 nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>d :ALEDetail<CR>
-nnoremap <silent> <Leader>h :ALEHover<CR>
-nnoremap <silent> <Leader>g :ALEGoToDefinition<CR>
+nnoremap <silent> <Leader>ad :ALEDetail<CR>
+nnoremap <silent> <Leader>ah :ALEHover<CR>
+nnoremap <silent> <Leader>ag :ALEGoToDefinition<CR>
+nnoremap <silent> <Leader>ai :ALEImport<CR>
 nnoremap <silent> <Leader>i :normal migg=G`i`<CR>
+nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
+nnoremap <Leader>sv :source $MYVIMRC<cr>
 
 " Mouse support
 set mouse=a
