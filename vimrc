@@ -18,18 +18,14 @@ if exists('g:loaded_minpac')
   call minpac#init()
   call minpac#add('k-takata/minpac', {'type': 'opt'})
 
-  " Autocompletion & linting
-  call minpac#add('w0rp/ale')
-  call minpac#add('lifepillar/vim-mucomplete')
-  call minpac#add('ludovicchabant/vim-gutentags')
+  " Languages
+  call minpac#add('philj56/vim-rgbasm')
 
-  " Visual
-  call minpac#add('junegunn/seoul256.vim')
-  call minpac#add('ayu-theme/ayu-vim')
-  call minpac#add('itchyny/lightline.vim')
-  call minpac#add('ap/vim-css-color')
-  call minpac#add('junegunn/goyo.vim')
-  call minpac#add('Yggdroot/indentLine')
+  " LSP
+  call minpac#add('yegappan/lsp')
+
+  " Completion
+  call minpac#add('lifepillar/vim-mucomplete')
 
   " File management
   call minpac#add('junegunn/fzf.vim')
@@ -40,144 +36,60 @@ if exists('g:loaded_minpac')
   call minpac#add('mhinz/vim-signify')
   call minpac#add('editorconfig/editorconfig-vim')
 
-  " Language specific
-  call minpac#add('mattn/emmet-vim')
-  call minpac#add('styled-components/vim-styled-components', {'branch': 'main'})
-  call minpac#add('elixir-editors/vim-elixir')
-  call minpac#add('slashmili/alchemist.vim')
-  call minpac#add('maxmellon/vim-jsx-pretty')
-  call minpac#add('jonsmithers/vim-html-template-literals')
-  call minpac#add('pangloss/vim-javascript')
-  call minpac#add('posva/vim-vue')
-  call minpac#add('cakebaker/scss-syntax.vim')
-  call minpac#add('jparise/vim-graphql')
-  call minpac#add('HerringtonDarkholme/yats.vim')
-
   " Misc
   call minpac#add('tpope/vim-surround')
   call minpac#add('tpope/vim-unimpaired')
+  call minpac#add('tpope/vim-eunuch')
+  call minpac#add('tpope/vim-repeat')
   call minpac#add('andymass/vim-matchup')
   call minpac#add('tomtom/tcomment_vim')
-
-  " Plugin specific config
-
-  " Colorscheme
-  let g:seoul256_background = 233
-  let g:seoul256_light_background = 254
-  let ayucolor="dark"
-  colorscheme ayu
-
-  " Statusline
-  set laststatus=2
-  let g:lightline = {}
-
-  let g:lightline.component_function = {
-        \     'gitbranch': 'fugitive#head'
-        \ }
-
-  let g:lightline.active = {
-        \   'left': [ [ 'mode', 'paste' ],
-        \             [ 'gitbranch', 'readonly', 'filename', 'modified' ] ],
-        \   'right': [ [ 'lineinfo' ],
-        \              [ 'percent' ],
-        \              [ 'filetype' ] ]
-        \ }
-
-  let g:lightline.colorscheme = 'ayu_dark'
-
-  function! LightMode()
-    set background=light
-    let ayucolor="light"
-    colorscheme ayu
-    let g:lightline.colorscheme = 'ayu_light'
-  endfunction
-
-  function! DarkMode()
-    set background=dark
-    let ayucolor="dark"
-    colorscheme ayu
-    let g:lightline.colorscheme = 'ayu_dark'
-  endfunction
-
-  " Line numbering
-  set number
-
-  " Faster update for signify
-  set updatetime=400
-
-  " Add fzf to runtime path
-  set rtp+=/usr/local/opt/fzf
-
-  " Map fzf to ctrl+p
-  nnoremap <silent> <C-p> :FZF -m<cr>
-
-  " Fix syntax highlighting in .vue files
-  autocmd FileType vue syntax sync fromstart
-  let g:vue_disable_pre_processors=1
-
-  " ALE Config
-  let g:ale_completion_enabled = 1
-  let g:ale_linters_explicit = 1
-
-  let g:ale_linters = {
-  \  'javascript': ['eslint', 'tsserver'],
-  \  'typescript': ['eslint', 'tsserver'],
-  \  'typescriptreact': ['eslint', 'tsserver']
-  \}
-
-  let g:ale_fixers = {
-  \   '*': ['remove_trailing_lines', 'trim_whitespace'],
-  \   'javascript': ['prettier', 'eslint'],
-  \   'typescript': ['prettier', 'eslint'],
-  \   'typescriptreact': ['prettier', 'eslint']
-  \}
-
-  set omnifunc=ale#completion#OmniFunc
-
-  " Decrease amount of preprocessor checks for vue files
-  let g:vue_pre_processors = ['scss']
-
-  " Signify colors
-  highlight SignColumn ctermbg=NONE cterm=NONE guibg=NONE gui=NONE
-  highlight SignifySignAdd    ctermfg=green  guifg=#acf2e4 cterm=NONE gui=NONE
-  highlight SignifySignDelete ctermfg=red    guifg=#ff8170 cterm=NONE gui=NONE
-  highlight SignifySignChange ctermfg=yellow guifg=#d9c97c cterm=NONE gui=NONE
-
-  " Gutentags
-  let g:gutentags_add_default_project_roots = 0
-  let g:gutentags_project_root = ['package.json', '.git', 'Makefile']
-  let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
-  let g:gutentags_generate_on_write = 1
-  let g:gutentags_ctags_exclude = ['node_modules']
-
-  " IndentLine
-  let g:indentLine_char = '▏'
-  let g:indentLine_first_char = '▏'
-  let g:indentLine_showFirstIndentLevel = 1
-  let g:indentLine_setColors = 0
+  call minpac#add('justinmk/vim-sneak')
 endif
+
+" Colorscheme
+colorscheme wildcharm
+
+" Statusline
+set laststatus=2
+
+" Show offscreen matching paren in popup
+let g:matchup_matchparen_offscreen = {'method': 'popup'}
+
+" Faster update for signify
+set updatetime=400
+
+" XCodeish signify settings
+let g:signify_sign_add    = '┃'
+let g:signify_sign_change = '┃'
+let g:signify_sign_delete = '•'
+let g:signify_sign_show_count = 0 " Don’t show the number of deleted lines.
+
+" Add fzf to runtime path
+set rtp+=/usr/local/opt/fzf
+
+" FZF
+let g:fzf_layout = { 'down': '40%' }
+
+if has("gui_running")
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+endif
+
+" Fix syntax highlighting in .vue files
+autocmd FileType vue syntax sync fromstart
 
 "
 " General config
 "
 
+" Automatically reload changed file
+set autoread
+
+" Line numbering
+set relativenumber
+set ruler
+
 " Show
 set showcmd
-
-" Colors
-set background=dark
-set termguicolors
-
-" Override background color with transparent
-" augroup vimrc
-"  autocmd!
-"  autocmd ColorScheme * hi Normal guibg=NONE
-"  autocmd ColorScheme * hi NonText guibg=NONE
-"  autocmd ColorScheme * hi EndOfBuffer guibg=NONE
-" augroup END
-
-" To map 2x <Esc> to exit terminal-mode:
-:tnoremap <Esc><Esc> <C-\><C-n>
 
 " Set swapfile folder to ~/.vim/swapfiles
 set directory=$HOME/.vim/swapfiles//
@@ -188,14 +100,42 @@ set backupdir=$HOME/.vim/backup//
 set undofile
 set undodir=$HOME/.vim/undo//
 
+if &history < 1000
+  set history=1000
+endif
+if &tabpagemax < 50
+  set tabpagemax=50
+endif
+if !empty(&viminfo)
+  set viminfo^=!
+endif
+
+set sessionoptions-=options
+set viewoptions-=options
+
 " Allow changing buffers with unsaved changes
 set hidden
 
+" Always display atleast one line line above/below cursor
+if !&scrolloff
+  set scrolloff=1
+endif
+if !&sidescrolloff
+  set sidescrolloff=5
+endif
+set display+=lastline
+
 " Search improvements
-set hlsearch  " highlight search terms
 set incsearch " show search matches as you type
 
-" Indentation & syntax
+" Highlight search results only when searching
+augroup vimrc-incsearch-highlight
+  autocmd!
+  autocmd CmdlineEnter /,\? :set hlsearch
+  autocmd CmdlineLeave /,\? :set nohlsearch
+augroup END
+
+" Default indentation & syntax
 filetype plugin on
 filetype plugin indent on
 syntax enable
@@ -206,10 +146,6 @@ set softtabstop=2
 set expandtab
 set shiftwidth=2
 
-" Columns (mark column 80)
-set colorcolumn=80
-highlight ColorColumn ctermbg=234 guibg=#1d1d21
-
 " Show trailing whitespace
 set list
 if &listchars ==# 'eol:$'
@@ -217,18 +153,18 @@ if &listchars ==# 'eol:$'
 endif
 
 " Change leader key
-let mapleader = ","
-let maplocalleader = ";"
+nnoremap <Space> <Nop>
+let mapleader = "\<Space>"
 
 " Remaps
-nnoremap <silent> <Leader>b :Buffers<CR>
-nnoremap <silent> <Leader>ad :ALEDetail<CR>
-nnoremap <silent> <Leader>ah :ALEHover<CR>
-nnoremap <silent> <Leader>ag :ALEGoToDefinition<CR>
-nnoremap <silent> <Leader>ai :ALEImport<CR>
+nnoremap <silent> <Leader>ff :FZF -m<cr>
+nnoremap <silent> <Leader>fb :Buffers<CR>
+nnoremap <silent> <Leader>/ :BLines<CR>
 nnoremap <silent> <Leader>i :normal migg=G`i`<CR>
-nnoremap <Leader>ev :vsplit $MYVIMRC<cr>
-nnoremap <Leader>sv :source $MYVIMRC<cr>
+nnoremap <Leader>ve :vsplit $MYVIMRC<cr>
+nnoremap <Leader>vs :source $MYVIMRC<cr>
+" To map 2x <Esc> to exit terminal-mode:
+tnoremap <Esc><Esc> <C-\><C-n>
 
 " Mouse support
 set mouse=a
@@ -243,7 +179,7 @@ set wildmode=list:longest,full
 set clipboard=unnamed
 
 " Completion
-set completeopt+=longest,menuone,noinsert,noselect
+set completeopt+=longest,menuone,noinsert,noselect,preview,popup
 set shortmess+=c   " Supress completion messages
 set belloff+=ctrlg " Silence Vim beeps during completion
 
@@ -257,5 +193,70 @@ let g:netrw_fastbrowse = 0
 set ttimeout " time out for key codes
 set ttimeoutlen=100 " wait up to 100ms after Esc for special key
 
+" Don't consider octals (e.g. 007) numbers for inc/dec
+set nrformats-=octal
+
 " Better html indenting of <style> tags, see :help html-indenting
-let g:html_indent_style1 = "inc"
+let g:html_indent_style1 = 'inc'
+
+" Use utf-8 encoding
+if &encoding ==# 'latin1' && has('gui_running')
+  set encoding=utf-8
+endif
+
+" Delete comment character when joining commented lines
+set formatoptions+=j
+
+" Change the direction of new splits
+set splitbelow
+set splitright
+
+" MacVim stuff
+if has("gui_macvim")
+  " set guifont=SF\ Mono\ Regular:h13
+  set guifont=-monospace-:h13
+endif
+
+" LSP config
+let tslsp = [#{
+      \    name: 'typescriptlang',
+      \    filetype: ['typescript', 'typescriptreact'],
+      \    path: '/Users/joonas/.asdf/shims/typescript-language-server',
+      \    args: ['--stdio'],
+      \    rootSearch: ['package.json'],
+      \    runUnlessSearch: ['deno.json'],
+      \  }]
+
+let denolsp = [#{
+      \    name: 'deno',
+      \    filetype: ['typescript', 'typescriptreact'],
+      \    path: '/Users/joonas/.asdf/shims/deno',
+      \    args: ['lsp'],
+      \    debug: v:true,
+      \    initializationOptions: #{
+      \       enable: v:true,
+      \       lint: v:true
+      \    },
+      \    rootSearch: ['deno.json'],
+      \    runIfSearch: ['deno.json'],
+      \  }]
+
+if executable('typescript-language-server')
+  autocmd VimEnter * call LspAddServer(tslsp)
+endif
+
+if executable('deno')
+  autocmd VimEnter * call LspAddServer(denolsp)
+endif
+
+def SetupLspKeys()
+  nnoremap <silent> K :LspHover<cr>
+  nnoremap <silent> [d :LspDiagPrev<cr>
+  nnoremap <silent> ]d :LspDiagNext<cr>
+  nnoremap <silent> gd :LspGotoDefinition<cr>
+  nnoremap <silent> gr :LspShowReferences<cr>
+  nnoremap <silent> <leader>d :LspDiagShow<cr>
+  nnoremap <silent> <leader>r :LspRename<cr>
+enddef
+
+autocmd User LspAttached call SetupLspKeys()
