@@ -1,10 +1,9 @@
--- vim-plug initialization
-local Plug = vim.fn['plug#']
-vim.call('plug#begin', vim.fn.stdpath('data') .. '/plugged')
-
 -------------------------------------------------------------------------------
 -- Plugins
 -------------------------------------------------------------------------------
+
+local Plug = vim.fn['plug#']
+vim.call('plug#begin', vim.fn.stdpath('data') .. '/plugged')
 
 -- Libraries
 Plug 'nvim-lua/plenary.nvim'                -- Required by telescope
